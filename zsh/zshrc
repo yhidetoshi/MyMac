@@ -1,34 +1,29 @@
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+if [[ -s "/Users/hidetoshi.yajima/.zprezto/init.zsh" ]]; then
+  source "/Users/hidetoshi.yajima/.zprezto/init.zsh"
   fi
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
 
-export PATH=/Users/hidetoshi/.rbenv/shims:/Users/hidetoshi/.rbenv/bin:/Users/hidetoshi/.rbenv/shims:/Users/hidetoshi/.rbenv/shims:/Users/hidetoshi/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/Users/hidetoshi/.rvm/bin:/usr/local/opt/go/libexec/bin:/Users/hidetoshi/bin:/Users/hidetoshi/.vimpkg/bin
-
-PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
-export PATH
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - zsh)"
 
 
+export GOPATH="/Users/hidetoshi.yajima/go"
+export PATH
 
-
-#export PATH=/usr/local/share/python:$PATH
-
-# for peco (brew install peco)
-function select-history() {
-    local tac
-    if which tac > /dev/null; then
-        tac="tac"
-    else
-        tac="tail -r"
-    fi
-    BUFFER=$(fc -l -n 1 | eval $tac | peco --query "$LBUFFER")
+function peco-history-selection() {
+    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
     CURSOR=$#BUFFER
-    zle -R -c
+     zle reset-prompt
 }
-    zle -N select-history
-    bindkey '^r' select-history
+
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
+
+alias ...='cd ../..'
+alias c='clear'
+alias s='sh'
+alias v='vim'
+alias p='pwd'
